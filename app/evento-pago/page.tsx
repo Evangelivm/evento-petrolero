@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -41,7 +41,6 @@ export default function EventoPagoPage() {
   const ruc = searchParams.get("ruc")?.trim() || "";
   const email = searchParams.get("email")?.trim() || "";
   const precioParam = searchParams.get("precio");
-  const monto = parseFloat(precioParam || "0");
   const moneda = searchParams.get("moneda") || "S/";
 
   // Estados
@@ -53,8 +52,36 @@ export default function EventoPagoPage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [pagoConfirmado, setPagoConfirmado] = useState<boolean>(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [comprobanteFile, setComprobanteFile] = useState<File | null>(null); // 👈 Nuevo estado para guardar la imagen
-  const [comprobanteUrl, setComprobanteUrl] = useState<string | null>(null); // 👈 Vista previa o URL final
+  const [comprobanteFile, setComprobanteFile] = useState<File | null>(null);
+  const [comprobanteUrl, setComprobanteUrl] = useState<string | null>(null);
+
+  // Estado para los días seleccionados
+  const [diasSeleccionados, setDiasSeleccionados] = useState<string[]>([]);
+
+  // Precio base según tipo
+  const getPrecioByTipo = (tipo: string) => {
+    switch (tipo) {
+      case "EMPRESAS":
+        return 300;
+      case "INSTITUCIONES":
+        return 300;
+      case "PROFESIONALES_ESTUDIANTES":
+        return 150;
+      case "PUBLICO_EN_GENERAL":
+        return 200;
+      default:
+        return 200;
+    }
+  };
+
+  const precioBase = getPrecioByTipo(tipo_participante);
+  const [monto, setMonto] = useState(precioBase);
+
+  // Actualizar monto cuando cambian los días seleccionados
+  useEffect(() => {
+    const nuevoMonto = precioBase * diasSeleccionados.length;
+    setMonto(nuevoMonto || precioBase);
+  }, [diasSeleccionados, precioBase]);
 
   // Función para copiar al portapapeles
   const copyToClipboard = (text: string, type: string) => {
@@ -72,12 +99,10 @@ export default function EventoPagoPage() {
         alert("Solo se permiten imágenes o archivos PDF.");
         return;
       }
-
-      setComprobanteFile(file); // Guardar archivo en estado
+      setComprobanteFile(file);
       setFileName(file.name);
       setFileUploaded(true);
 
-      // Previsualizar si es imagen
       if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -94,6 +119,18 @@ export default function EventoPagoPage() {
   const handleConfirmarInscripcion = async () => {
     setIsSubmitting(true);
 
+    // Validar que se haya seleccionado al menos un día
+    if (diasSeleccionados.length === 0) {
+      alert("Debe seleccionar al menos un día para continuar.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Crear el campo "dias" como string de números separados por comas
+    const diasSeleccionadosNumeros = diasSeleccionados
+      .map((dia) => dia.replace("Dia ", "")) // Quitar "Dia "
+      .join(","); // Unir en string
+
     const dataToSubmit = {
       codigo,
       nombre,
@@ -105,6 +142,7 @@ export default function EventoPagoPage() {
       moneda,
       metodo_pago: metodo_pago.toUpperCase(),
       comprobante: null as string | null,
+      dias: diasSeleccionadosNumeros, // 👈 Nuevo campo añadido
     };
 
     try {
@@ -114,18 +152,17 @@ export default function EventoPagoPage() {
           setIsSubmitting(false);
           return;
         }
-
-        // Subir comprobante a Cloudinary
         const url = await uploadComprobante(comprobanteFile);
-        dataToSubmit.comprobante = url; // Asignamos la URL
+        dataToSubmit.comprobante = url;
       }
-
       await createParticipant(dataToSubmit);
       setPagoConfirmado(true);
       setIsSubmitting(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al registrar el participante:", error);
-      alert("Hubo un problema al registrar su inscripción.");
+      alert(
+        `Hubo un problema al registrar su inscripción: ${error.response.data.message}`
+      );
       setIsSubmitting(false);
     }
   };
@@ -142,21 +179,6 @@ export default function EventoPagoPage() {
       setQrCodeUrl(url);
     } catch (error) {
       console.error("Error al generar el código QR:", error);
-    }
-  };
-
-  const getPrecioByTipo = (tipo: string) => {
-    switch (tipo) {
-      case "EMPRESAS":
-        return 1000;
-      case "INSTITUCIONES":
-        return 500;
-      case "PROFESIONALES_ESTUDIANTES":
-        return 220;
-      case "PUBLICO_EN_GENERAL":
-        return 220;
-      default:
-        return 220;
     }
   };
 
@@ -254,6 +276,49 @@ export default function EventoPagoPage() {
                       <p className="text-sm text-gray-600">{telefono}</p>
                     </div>
                   </div>
+
+                  {/* Selector de días */}
+                  <div className="mt-6">
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">
+                      Seleccionar Días
+                    </h3>
+                    <div className="flex flex-wrap gap-4">
+                      {["Dia 1", "Dia 2", "Dia 3"].map((dia) => (
+                        <div key={dia} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id={dia}
+                            checked={diasSeleccionados.includes(dia)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setDiasSeleccionados([
+                                  ...diasSeleccionados,
+                                  dia,
+                                ]);
+                              } else {
+                                setDiasSeleccionados(
+                                  diasSeleccionados.filter((d) => d !== dia)
+                                );
+                              }
+                            }}
+                            className="rounded text-green-600 focus:ring-green-500"
+                          />
+                          <label
+                            htmlFor={dia}
+                            className="text-sm font-medium text-gray-700"
+                          >
+                            {dia}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Mostrar monto actualizado */}
+                  <p className="mt-4 text-lg font-semibold text-green-700">
+                    Monto Total: {moneda} {monto.toFixed(2)} {" - "}
+                    {diasSeleccionados.length} día(s)
+                  </p>
                 </CardContent>
               </Card>
 
@@ -416,9 +481,7 @@ export default function EventoPagoPage() {
                                     </span>
                                     <div className="flex items-center">
                                       <span className="font-medium">
-                                        S/.
-                                        {getPrecioByTipo(tipo_participante)}
-                                        .00 SOLES
+                                        S/.{monto}.00 SOLES
                                       </span>
                                       <Button
                                         variant="ghost"
@@ -474,9 +537,7 @@ export default function EventoPagoPage() {
                             <Alert>
                               <AlertCircle className="h-4 w-4" />
                               <AlertDescription>
-                                Realice el pago por S/.
-                                {getPrecioByTipo(tipo_participante)}.00 SOLES
-                                usando{" "}
+                                Realice el pago por S/.{monto}.00 SOLES usando{" "}
                                 {metodo_pago === "YAPE" ? "Yape" : "Plin"}.
                               </AlertDescription>
                             </Alert>
@@ -529,9 +590,7 @@ export default function EventoPagoPage() {
                                           Monto:
                                         </span>
                                         <span className="font-medium">
-                                          S/.
-                                          {getPrecioByTipo(tipo_participante)}
-                                          .00 SOLES
+                                          S/.{monto}.00 SOLES
                                         </span>
                                       </div>
                                       <div className="flex justify-between items-center">
@@ -549,6 +608,7 @@ export default function EventoPagoPage() {
                             </div>
                           </>
                         )}
+
                         <Button
                           type="button"
                           className="w-full"
@@ -557,6 +617,7 @@ export default function EventoPagoPage() {
                           Continuar a Subir Comprobante
                         </Button>
                       </TabsContent>
+
                       <TabsContent
                         value="comprobante"
                         className="p-4 space-y-4"
@@ -666,8 +727,7 @@ export default function EventoPagoPage() {
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription>
                         Debe llegar 30 minutos antes del inicio del evento para
-                        realizar el pago en efectivo (S/
-                        {getPrecioByTipo(tipo_participante)}.00 soles) y
+                        realizar el pago en efectivo (S/.{monto}.00 soles) y
                         completar su acreditación.
                       </AlertDescription>
                     </Alert>
@@ -685,8 +745,7 @@ export default function EventoPagoPage() {
                             <strong>{codigo}</strong>
                           </li>
                           <li>
-                            Tenga preparado el monto exacto: S/
-                            {getPrecioByTipo(tipo_participante)}.00 soles
+                            Tenga preparado el monto exacto: S/.{monto}.00 soles
                           </li>
                           <li>
                             Recibirá su credencial y materiales del evento

@@ -56,8 +56,8 @@ export default function EventRegistrationForm() {
       if (!formData.telefono || !/^\d{9}$/.test(formData.telefono)) {
         return "El teléfono debe tener exactamente 9 dígitos.";
       }
-      if (!formData.ruc || formData.ruc.length !== 11) {
-        return "El RUC debe tener exactamente 11 dígitos.";
+      if (!formData.ruc || formData.ruc.length !== 12) {
+        return "El RUC debe tener exactamente 12 dígitos.";
       }
       if (!formData.email || !formData.email.includes("@")) {
         return "Por favor ingrese un correo electrónico válido.";
@@ -101,24 +101,24 @@ export default function EventRegistrationForm() {
         .toUpperCase()}`;
 
       // Determinar precio según tipo de participante
-      let monto = 0;
-      const moneda = "S/";
-      switch (formData.tipoParticipante) {
-        case "empresas":
-          monto = 1000;
-          break;
-        case "profesionales": // instituciones
-          monto = 500;
-          break;
-        case "estudiante": // profesionales - estudiantes
-          monto = 220;
-          break;
-        case "publico":
-          monto = 220;
-          break;
-        default:
-          monto = 220;
-      }
+      // let monto = 0;
+      // const moneda = "S/";
+      // switch (formData.tipoParticipante) {
+      //   case "empresas":
+      //     monto = 900;
+      //     break;
+      //   case "instituciones": // instituciones
+      //     monto = 900;
+      //     break;
+      //   case "estudiante": // profesionales - estudiantes
+      //     monto = 450;
+      //     break;
+      //   case "publico":
+      //     monto = 600;
+      //     break;
+      //   default:
+      //     monto = 600;
+      // }
       // Función para obtener el label del tipo de participante
       const getTipoLabel = (tipo: string) => {
         switch (tipo) {
@@ -145,7 +145,7 @@ export default function EventRegistrationForm() {
         telefono: formData.telefono.trim(),
         ruc: formData.ruc.trim(),
         email: formData.email.trim(),
-        monto,
+        // monto,
       };
 
       // Mostrar en consola el objeto que se enviaría al backend
@@ -155,8 +155,8 @@ export default function EventRegistrationForm() {
       const params = new URLSearchParams({
         codigo: cleanedData.codigo,
         tipo: cleanedData.tipo_participante,
-        precio: cleanedData.monto.toString(), // 👈 Solo aquí se convierte a string
-        moneda,
+        // precio: cleanedData.monto.toString(), // 👈 Solo aquí se convierte a string
+        // moneda,
         nombre: cleanedData.nombre,
         telefono: cleanedData.telefono,
         ruc: cleanedData.ruc,
