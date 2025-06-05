@@ -24,6 +24,7 @@ import {
   AlertCircle,
   Upload,
   Building2,
+  Loader2,
   Smartphone,
   Banknote,
 } from "lucide-react";
@@ -422,10 +423,16 @@ export default function EventoPagoPage() {
                   <CardContent>
                     <Tabs value={activeTab} onValueChange={setActiveTab}>
                       <TabsList className="w-full grid grid-cols-2">
-                        <TabsTrigger value="instrucciones">
+                        <TabsTrigger
+                          value="instrucciones"
+                          className="text-xs sm:text-base"
+                        >
                           Instrucciones de Pago
                         </TabsTrigger>
-                        <TabsTrigger value="comprobante">
+                        <TabsTrigger
+                          value="comprobante"
+                          className="text-xs sm:text-base"
+                        >
                           Subir Comprobante
                         </TabsTrigger>
                       </TabsList>
@@ -444,10 +451,10 @@ export default function EventoPagoPage() {
                             </Alert>
                             <Card>
                               <CardContent className="pt-6">
-                                <h4 className="font-medium mb-2">
+                                <h4 className="font-medium mb-2 text-sm sm:text-base">
                                   Datos Bancarios
                                 </h4>
-                                <div className="space-y-2 text-sm">
+                                <div className="space-y-2 text-xs sm:text-sm">
                                   <div className="flex justify-between items-center">
                                     <span className="text-gray-500">
                                       Banco:
@@ -459,7 +466,7 @@ export default function EventoPagoPage() {
                                       <Button
                                         variant="ghost"
                                         size="icon"
-                                        className="h-8 w-8 ml-2"
+                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
                                         onClick={() =>
                                           copyToClipboard(
                                             "Banco de Crédito del Perú (BCP)",
@@ -468,13 +475,72 @@ export default function EventoPagoPage() {
                                         }
                                       >
                                         {copiedText === "banco" ? (
-                                          <CheckCircle className="h-4 w-4 text-green-500" />
+                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
                                         ) : (
-                                          <Copy className="h-4 w-4" />
+                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
                                         )}
                                       </Button>
                                     </div>
                                   </div>
+
+                                  {/* Nuevo campo - Titular */}
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-gray-500">
+                                      Titular:
+                                    </span>
+                                    <div className="flex items-center">
+                                      <span className="font-medium">
+                                        Reactiva Petrol Eventos
+                                      </span>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
+                                        onClick={() =>
+                                          copyToClipboard(
+                                            "Reactiva Petrol Eventos",
+                                            "titular"
+                                          )
+                                        }
+                                      >
+                                        {copiedText === "titular" ? (
+                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
+                                        ) : (
+                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
+                                        )}
+                                      </Button>
+                                    </div>
+                                  </div>
+
+                                  {/* Nuevo campo - Cuenta Corriente */}
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-gray-500">
+                                      Cuenta Corriente:
+                                    </span>
+                                    <div className="flex items-center">
+                                      <span className="font-medium">
+                                        194-2458792-1-26
+                                      </span>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
+                                        onClick={() =>
+                                          copyToClipboard(
+                                            "194-2458792-1-26",
+                                            "cuenta"
+                                          )
+                                        }
+                                      >
+                                        {copiedText === "cuenta" ? (
+                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
+                                        ) : (
+                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
+                                        )}
+                                      </Button>
+                                    </div>
+                                  </div>
+
                                   <div className="flex justify-between items-center">
                                     <span className="text-gray-500">
                                       Monto:
@@ -486,7 +552,7 @@ export default function EventoPagoPage() {
                                       <Button
                                         variant="ghost"
                                         size="icon"
-                                        className="h-8 w-8 ml-2"
+                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
                                         onClick={() =>
                                           copyToClipboard(
                                             monto.toString(),
@@ -495,9 +561,9 @@ export default function EventoPagoPage() {
                                         }
                                       >
                                         {copiedText === "monto" ? (
-                                          <CheckCircle className="h-4 w-4 text-green-500" />
+                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
                                         ) : (
-                                          <Copy className="h-4 w-4" />
+                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
                                         )}
                                       </Button>
                                     </div>
@@ -513,15 +579,15 @@ export default function EventoPagoPage() {
                                       <Button
                                         variant="ghost"
                                         size="icon"
-                                        className="h-8 w-8 ml-2"
+                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
                                         onClick={() =>
                                           copyToClipboard(codigo, "concepto")
                                         }
                                       >
                                         {copiedText === "concepto" ? (
-                                          <CheckCircle className="h-4 w-4 text-green-500" />
+                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
                                         ) : (
-                                          <Copy className="h-4 w-4" />
+                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
                                         )}
                                       </Button>
                                     </div>
@@ -688,12 +754,12 @@ export default function EventoPagoPage() {
                             </div>
                           )}
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                           <Button
                             type="button"
                             variant="outline"
                             onClick={() => setActiveTab("instrucciones")}
-                            className="flex-1"
+                            className="w-full sm:flex-1 py-2 text-sm sm:text-base"
                           >
                             Volver a Instrucciones
                           </Button>
@@ -701,9 +767,16 @@ export default function EventoPagoPage() {
                             type="button"
                             onClick={handleConfirmarInscripcion}
                             disabled={!fileUploaded || isSubmitting}
-                            className="flex-1 bg-green-600 hover:bg-green-700"
+                            className="w-full sm:flex-1 py-2 text-sm sm:text-base bg-green-600 hover:bg-green-700"
                           >
-                            {isSubmitting ? "Verificando..." : "Confirmar Pago"}
+                            {isSubmitting ? (
+                              <span className="flex items-center justify-center gap-2">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Verificando...
+                              </span>
+                            ) : (
+                              "Confirmar Pago"
+                            )}
                           </Button>
                         </div>
                       </TabsContent>
