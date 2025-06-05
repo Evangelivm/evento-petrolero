@@ -460,18 +460,13 @@ export default function EventoPagoPage() {
                                       Banco:
                                     </span>
                                     <div className="flex items-center">
-                                      <span className="font-medium">
-                                        Banco de Crédito del Perú (BCP)
-                                      </span>
+                                      <span className="font-medium">BBVA</span>
                                       <Button
                                         variant="ghost"
                                         size="icon"
                                         className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
                                         onClick={() =>
-                                          copyToClipboard(
-                                            "Banco de Crédito del Perú (BCP)",
-                                            "banco"
-                                          )
+                                          copyToClipboard("BBVA", "banco")
                                         }
                                       >
                                         {copiedText === "banco" ? (
@@ -490,7 +485,7 @@ export default function EventoPagoPage() {
                                     </span>
                                     <div className="flex items-center">
                                       <span className="font-medium">
-                                        Reactiva Petrol Eventos
+                                        T & L del Oriente SAC
                                       </span>
                                       <Button
                                         variant="ghost"
@@ -498,7 +493,7 @@ export default function EventoPagoPage() {
                                         className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
                                         onClick={() =>
                                           copyToClipboard(
-                                            "Reactiva Petrol Eventos",
+                                            "T & L del Oriente SAC",
                                             "titular"
                                           )
                                         }
@@ -519,7 +514,7 @@ export default function EventoPagoPage() {
                                     </span>
                                     <div className="flex items-center">
                                       <span className="font-medium">
-                                        194-2458792-1-26
+                                        0011-0982-0100020971
                                       </span>
                                       <Button
                                         variant="ghost"
@@ -527,12 +522,65 @@ export default function EventoPagoPage() {
                                         className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
                                         onClick={() =>
                                           copyToClipboard(
-                                            "194-2458792-1-26",
+                                            "0011-0982-0100020971",
                                             "cuenta"
                                           )
                                         }
                                       >
                                         {copiedText === "cuenta" ? (
+                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
+                                        ) : (
+                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
+                                        )}
+                                      </Button>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-gray-500">
+                                      Cuenta Interbancaria:
+                                    </span>
+                                    <div className="flex items-center">
+                                      <span className="font-medium">
+                                        011-982-00010002097166
+                                      </span>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
+                                        onClick={() =>
+                                          copyToClipboard(
+                                            "011-982-00010002097166",
+                                            "cuenta_i"
+                                          )
+                                        }
+                                      >
+                                        {copiedText === "cuenta_i" ? (
+                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
+                                        ) : (
+                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
+                                        )}
+                                      </Button>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-gray-500">
+                                      Descripción:
+                                    </span>
+                                    <div className="flex items-center">
+                                      <span className="font-medium">
+                                        {codigo}
+                                      </span>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
+                                        onClick={() =>
+                                          copyToClipboard(codigo, "descripcion")
+                                        }
+                                      >
+                                        {copiedText === "descripcion" ? (
                                           <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
                                         ) : (
                                           <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -568,30 +616,6 @@ export default function EventoPagoPage() {
                                       </Button>
                                     </div>
                                   </div>
-                                  <div className="flex justify-between items-center">
-                                    <span className="text-gray-500">
-                                      Concepto:
-                                    </span>
-                                    <div className="flex items-center">
-                                      <span className="font-medium">
-                                        {codigo}
-                                      </span>
-                                      <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-6 w-6 sm:h-8 sm:w-8 ml-1 sm:ml-2"
-                                        onClick={() =>
-                                          copyToClipboard(codigo, "concepto")
-                                        }
-                                      >
-                                        {copiedText === "concepto" ? (
-                                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
-                                        ) : (
-                                          <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
-                                        )}
-                                      </Button>
-                                    </div>
-                                  </div>
                                 </div>
                               </CardContent>
                             </Card>
@@ -613,8 +637,8 @@ export default function EventoPagoPage() {
                                   <Image
                                     src={
                                       metodo_pago === "YAPE"
-                                        ? "/yape-qr.png"
-                                        : "/plin-qr.png"
+                                        ? "/yape evento p.webp"
+                                        : "/plin-interbank-4391_logosenvector.com_5.svg"
                                     }
                                     alt={`Código QR de ${metodo_pago}`}
                                     width={200}
@@ -623,8 +647,9 @@ export default function EventoPagoPage() {
                                   />
                                 </div>
                                 <p className="text-sm text-gray-600">
-                                  Escanea este código QR con la app de{" "}
-                                  {metodo_pago === "YAPE" ? "Yape" : "Plin"}
+                                  {metodo_pago === "YAPE"
+                                    ? "Escanea este código QR con la app de Yape"
+                                    : ""}
                                 </p>
                               </div>
                               <div className="flex-1">
@@ -640,7 +665,7 @@ export default function EventoPagoPage() {
                                           Nombre:
                                         </span>
                                         <span className="font-medium">
-                                          Reactiva Petrol
+                                          Teddy Raul Caceres Abensur
                                         </span>
                                       </div>
                                       <div className="flex justify-between items-center">
@@ -648,7 +673,9 @@ export default function EventoPagoPage() {
                                           Teléfono:
                                         </span>
                                         <span className="font-medium">
-                                          +51 987 654 321
+                                          {metodo_pago === "YAPE"
+                                            ? "945 709 570"
+                                            : "977 178 156"}
                                         </span>
                                       </div>
                                       <div className="flex justify-between items-center">
