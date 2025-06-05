@@ -9,13 +9,13 @@ import { Label } from "@/components/ui/label";
 
 interface Persona {
   nombre: string;
-  telefono: string;
+  telefono: number;
 }
 
 interface FormData {
   tipoParticipante: string;
   nombre: string;
-  telefono: string;
+  telefono: number;
   ruc: string;
   email: string;
   personas: Persona[];
@@ -27,12 +27,12 @@ export default function EventRegistrationForm() {
   const [formData, setFormData] = useState<FormData>({
     tipoParticipante: "",
     nombre: "",
-    telefono: "",
+    telefono: 0,
     ruc: "",
     email: "",
     personas: Array(5)
       .fill(null)
-      .map(() => ({ nombre: "", telefono: "" })),
+      .map(() => ({ nombre: "", telefono: 0 })),
     terminosCondiciones: false,
   });
 
@@ -53,7 +53,7 @@ export default function EventRegistrationForm() {
       if (!formData.nombre || formData.nombre.length < 2) {
         return "El nombre debe tener al menos 2 caracteres.";
       }
-      if (!formData.telefono || !/^\d{9}$/.test(formData.telefono)) {
+      if (!formData.telefono || !/^\d{9}$/.test(formData.telefono.toString())) {
         return "El teléfono debe tener exactamente 9 dígitos.";
       }
       if (!formData.ruc || formData.ruc.length !== 12) {
@@ -66,7 +66,7 @@ export default function EventRegistrationForm() {
       if (!formData.nombre || formData.nombre.length < 2) {
         return "El nombre debe tener al menos 2 caracteres.";
       }
-      if (!formData.telefono || !/^\d{9}$/.test(formData.telefono)) {
+      if (!formData.telefono || !/^\d{9}$/.test(formData.telefono.toString())) {
         return "El teléfono debe tener exactamente 9 dígitos.";
       }
       if (!formData.email || !formData.email.includes("@")) {
@@ -142,7 +142,7 @@ export default function EventRegistrationForm() {
           formData.tipoParticipante
         ).toUpperCase(),
         nombre: formData.nombre.trim().toUpperCase(),
-        telefono: formData.telefono.trim(),
+        telefono: formData.telefono,
         ruc: formData.ruc.trim(),
         email: formData.email.trim(),
         // monto,
@@ -158,7 +158,7 @@ export default function EventRegistrationForm() {
         // precio: cleanedData.monto.toString(), // 👈 Solo aquí se convierte a string
         // moneda,
         nombre: cleanedData.nombre,
-        telefono: cleanedData.telefono,
+        telefono: cleanedData.telefono.toString(),
         ruc: cleanedData.ruc,
         email: cleanedData.email,
       });
@@ -260,9 +260,27 @@ export default function EventRegistrationForm() {
         <Label>Teléfono</Label>
         <Input
           placeholder="987654321"
-          value={formData.telefono}
-          onChange={(e) => updateField("telefono", e.target.value)}
+          value={formData.telefono === 0 ? "" : formData.telefono}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (/^\d{0,9}$/.test(value)) {
+              updateField("telefono", value === "" ? 0 : Number(value));
+            }
+          }}
+          inputMode="numeric"
+          maxLength={9}
+          className={
+            formData.telefono && !/^\d{0,9}$/.test(formData.telefono.toString())
+              ? "border-red-500"
+              : ""
+          }
         />
+        {formData.telefono !== 0 &&
+          !/^\d{0,9}$/.test(formData.telefono.toString()) && (
+            <p className="text-sm text-red-500 mt-1">
+              Solo se permiten hasta 9 dígitos numéricos.
+            </p>
+          )}
       </div>
 
       {/* Términos y condiciones */}

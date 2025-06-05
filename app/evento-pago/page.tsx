@@ -135,7 +135,7 @@ export default function EventoPagoPage() {
     const dataToSubmit = {
       codigo,
       nombre,
-      telefono,
+      telefono: Number(telefono),
       tipo_participante,
       ruc,
       email,

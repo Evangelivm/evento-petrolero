@@ -10,7 +10,7 @@ export const createParticipant = async (data: {
   codigo: string;
   tipo_participante: string;
   nombre: string;
-  telefono: string;
+  telefono: number;
   ruc: string;
   email: string;
   monto: number;
