@@ -56,8 +56,8 @@ export default function EventRegistrationForm() {
       if (!formData.telefono || !/^\d{9}$/.test(formData.telefono.toString())) {
         return "El teléfono debe tener exactamente 9 dígitos.";
       }
-      if (!formData.ruc || formData.ruc.length !== 12) {
-        return "El RUC debe tener exactamente 12 dígitos.";
+      if (!formData.ruc || formData.ruc.length !== 11) {
+        return "El RUC debe tener exactamente 11 dígitos.";
       }
       if (!formData.email || !formData.email.includes("@")) {
         return "Por favor ingrese un correo electrónico válido.";
