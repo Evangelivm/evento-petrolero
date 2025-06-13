@@ -129,7 +129,7 @@ export default function EventRegistrationForm() {
           case "estudiante":
             return "Profesionales_Estudiantes";
           case "publico":
-            return "Público_en_General";
+            return "Publico_en_General";
           default:
             return tipo;
         }
