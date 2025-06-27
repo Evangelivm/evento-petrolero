@@ -127,7 +127,9 @@ export default function EventRegistrationForm() {
           case "instituciones":
             return "Instituciones";
           case "estudiante":
-            return "Profesionales_Estudiantes";
+            return "Estudiantes";
+          case "profesionales":
+            return "Profesionales";
           case "publico":
             return "Publico_en_General";
           default:
@@ -203,7 +205,16 @@ export default function EventRegistrationForm() {
           <div className="flex items-center space-x-3">
             <RadioGroupItem value="estudiante" id="estudiante" />
             <Label htmlFor="estudiante" className="font-normal cursor-pointer">
-              Profesionales - Estudiantes
+              Estudiantes
+            </Label>
+          </div>
+          <div className="flex items-center space-x-3">
+            <RadioGroupItem value="profesionales" id="profesionales" />
+            <Label
+              htmlFor="profesionales"
+              className="font-normal cursor-pointer"
+            >
+              Profesionales
             </Label>
           </div>
           <div className="flex items-center space-x-3">

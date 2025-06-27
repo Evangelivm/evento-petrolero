@@ -63,15 +63,17 @@ export default function EventoPagoPage() {
   const getPrecioByTipo = (tipo: string) => {
     switch (tipo) {
       case "EMPRESAS":
-        return 300;
+        return 600;
       case "INSTITUCIONES":
-        return 300;
-      case "PROFESIONALES_ESTUDIANTES":
-        return 150;
+        return 450;
+      case "PROFESIONALES":
+        return 450;
+      case "ESTUDIANTES":
+        return 350;
       case "PUBLICO_EN_GENERAL":
-        return 200;
+        return 450;
       default:
-        return 200;
+        return 450;
     }
   };
 
@@ -127,10 +129,11 @@ export default function EventoPagoPage() {
       return;
     }
 
-    // Crear el campo "dias" como string de números separados por comas
+    // Crear el campo "dias" como string de números separados por comas, ORDENADOS
     const diasSeleccionadosNumeros = diasSeleccionados
-      .map((dia) => dia.replace("Dia ", "")) // Quitar "Dia "
-      .join(","); // Unir en string
+      .map((dia) => Number(dia.replace("Dia ", ""))) // Extrae el número
+      .sort((a, b) => a - b) // Ordena numéricamente
+      .join(","); // Une en string
 
     const dataToSubmit = {
       codigo,
@@ -143,7 +146,7 @@ export default function EventoPagoPage() {
       moneda,
       metodo_pago: metodo_pago.toUpperCase(),
       comprobante: null as string | null,
-      dias: diasSeleccionadosNumeros, // 👈 Nuevo campo añadido
+      dias: diasSeleccionadosNumeros, // 👈 Ahora siempre ordenado
     };
 
     try {
@@ -312,6 +315,156 @@ export default function EventoPagoPage() {
                           </label>
                         </div>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Beneficios incluidos */}
+                  <div className="mt-8 mb-4">
+                    <div className="bg-gradient-to-br from-green-100 via-green-50 to-white border-2 border-green-300 rounded-2xl p-6 shadow-lg flex flex-col items-center animate-fade-in">
+                      <h2 className="text-2xl sm:text-2xl font-extrabold text-green-900 mb-3 uppercase tracking-wider drop-shadow">
+                        ¡Tu Inscripción Incluye!
+                      </h2>
+                      <p className="text-green-800 font-semibold mb-4 text-center text-base sm:text-lg">
+                        Disfruta de una experiencia premium y haz networking con
+                        los líderes del sector.
+                      </p>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-green-900 font-semibold text-base sm:text-lg w-full max-w-xl">
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block text-green-600">
+                            <svg
+                              width="22"
+                              height="22"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                fill="#22c55e"
+                                opacity="0.15"
+                              />
+                              <path
+                                d="M7 13l3 3 7-7"
+                                stroke="#22c55e"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          Almuerzo Corporativo
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block text-green-600">
+                            <svg
+                              width="22"
+                              height="22"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                fill="#22c55e"
+                                opacity="0.15"
+                              />
+                              <path
+                                d="M7 13l3 3 7-7"
+                                stroke="#22c55e"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          2 Coffee Breaks
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block text-green-600">
+                            <svg
+                              width="22"
+                              height="22"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                fill="#22c55e"
+                                opacity="0.15"
+                              />
+                              <path
+                                d="M7 13l3 3 7-7"
+                                stroke="#22c55e"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          Networking Exclusivo
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="inline-block text-green-600">
+                            <svg
+                              width="22"
+                              height="22"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                fill="#22c55e"
+                                opacity="0.15"
+                              />
+                              <path
+                                d="M7 13l3 3 7-7"
+                                stroke="#22c55e"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          Acceso a la Zona VIP
+                        </li>
+                        <li className="flex items-center gap-2 sm:col-span-2">
+                          <span className="inline-block text-green-600">
+                            <svg
+                              width="22"
+                              height="22"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                fill="#22c55e"
+                                opacity="0.15"
+                              />
+                              <path
+                                d="M7 13l3 3 7-7"
+                                stroke="#22c55e"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          Cocktail de Cierre
+                        </li>
+                      </ul>
+                      <div className="mt-5">
+                        <span className="inline-block bg-green-600 text-white font-bold px-6 py-2 rounded-full shadow transition">
+                          ¡Aprovecha al máximo tu participación!
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -909,10 +1062,20 @@ export default function EventoPagoPage() {
                 <AlertDescription>
                   <strong>INFORMACIÓN IMPORTANTE:</strong>
                   <br />
-                  1.- Enviaremos un correo electrónico con un QR de confirmación
-                  de su PAGO una vez validado.
-                  <br />
-                  2.- El día del evento, presente su código QR para el acceso.
+                  {metodo_pago === "EFECTIVO" ? (
+                    <>
+                      1.- El día del evento, presente su código QR para el
+                      acceso.
+                    </>
+                  ) : (
+                    <>
+                      1.- Enviaremos un correo electrónico con un QR de
+                      confirmación de su PAGO una vez validado.
+                      <br />
+                      2.- El día del evento, presente su código QR para el
+                      acceso.
+                    </>
+                  )}
                 </AlertDescription>
               </Alert>
             </div>
