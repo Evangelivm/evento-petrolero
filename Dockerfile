@@ -3,6 +3,13 @@
 FROM node:22-alpine AS base
 #FROM node:18-alpine AS base
 
+# ==== Variables globales para todas las etapas ====
+ARG CLOUDINARY_CLOUD_NAME
+ARG CLOUDINARY_API_KEY
+ARG CLOUDINARY_API_SECRET
+ARG CLOUDINARY_URL
+ARG NEXT_PUBLIC_API_URL
+
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -18,12 +25,18 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Inyectar variables EN build-time (crítico para Next.js)
+ENV CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
+ENV CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
+ENV CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET
+ENV CLOUDINARY_URL=$CLOUDINARY_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 # Enable standalone output in next.config.js
 RUN sed -i 's/\/\/\s*output: "standalone"/output: "standalone"/' next.config.mjs
@@ -47,6 +60,11 @@ RUN mkdir -p /app/public
 FROM base AS runner
 WORKDIR /app
 
+ENV CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
+ENV CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
+ENV CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET
+ENV CLOUDINARY_URL=$CLOUDINARY_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED=1
