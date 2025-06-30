@@ -268,7 +268,7 @@ export default function Home() {
               <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl">
                 Congreso Internacional:{" "}
                 <span className="text-amber-500">Reactivación Petrolera</span>{" "}
-                en la Región Piura
+                en las Regiones Piura Y Tumbes
               </h1>
               <p className="text-base sm:text-xl text-gray-300">
                 Impulsando las Operaciones Offshore y OnShore en Cuencas Talara
