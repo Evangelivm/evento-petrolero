@@ -63,11 +63,11 @@ export default function EventoPagoPage() {
   const getPrecioByTipo = (tipo: string) => {
     switch (tipo) {
       case "EMPRESAS":
-        return 600;
+        return 900;
       case "INSTITUCIONES":
-        return 450;
+        return 900;
       case "PROFESIONALES":
-        return 450;
+        return 500;
       case "ESTUDIANTES":
         return 350;
       case "PUBLICO_EN_GENERAL":
