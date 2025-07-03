@@ -291,7 +291,7 @@ export default function Home() {
             <div className="flex justify-center lg:justify-end order-first lg:order-last">
               <div className="max-w-xl sm:max-w-3xl lg:max-w-5xl xl:max-w-6xl w-full">
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-28%20at%2012.52.23%20PM-IwZ9s2e4IgTp8acyFDIQFm3ypYnLB3.jpeg"
+                  src="flyer_horizontal.webp"
                   alt="Congreso Internacional Reactivación Petrolera en la Región Piura - 12 al 14 Agosto 2025 - Hotel Pacifico Talara"
                   width={1600}
                   height={1200}
